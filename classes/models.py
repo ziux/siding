@@ -9,8 +9,8 @@ class Class(models.Model):
     name = models.CharField(verbose_name='班级名称', max_length=255)
     number = models.IntegerField(verbose_name='班级人数')
     session = models.IntegerField(verbose_name='届')
-    academe = models.IntegerField(verbose_name='学院')
-    faculty = models.IntegerField(verbose_name='系')
+    academe = models.CharField(verbose_name='学院', max_length=255)
+    faculty = models.CharField(verbose_name='系', max_length=255)
     remark = models.CharField(verbose_name='备注', max_length=255)
 
 

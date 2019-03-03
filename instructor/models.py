@@ -5,11 +5,11 @@ from course.models import TeachPlan
 class Teacher(models.Model):
     code = models.CharField(verbose_name='工号',max_length=255,unique=True)
     name = models.CharField(verbose_name='姓名',max_length=255)
-    professional_rank = models.IntegerField(verbose_name='职称')
+    professional_rank = models.CharField(verbose_name='职称',max_length=255)
     phone = models.CharField(verbose_name='联系方式',max_length=255)
-    academe = models.IntegerField(verbose_name='学院')
-    faculty = models.IntegerField(verbose_name='系')
-    education = models.IntegerField(verbose_name='学历')
+    academe = models.CharField(verbose_name='学院', max_length=255)
+    faculty = models.CharField(verbose_name='系', max_length=255)
+    education = models.CharField(verbose_name='学历', max_length=255)
     remark = models.CharField(verbose_name='备注',max_length=255)
 
 
