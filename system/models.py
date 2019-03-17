@@ -11,6 +11,7 @@ class Token(models.Model):
 class Account(models.Model):
     createdate = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updatedate = models.DateTimeField(auto_now=True, blank=True, null=True)
+    df = models.BooleanField(default=False)
     accname = models.CharField(verbose_name='账户名',max_length=255)
     password = models.CharField(verbose_name='密码',max_length=255)
     identity = models.CharField(verbose_name='身份',max_length=255)
@@ -25,6 +26,7 @@ class Account(models.Model):
 class Dictionary(models.Model):
     name = models.CharField(verbose_name='名',max_length=255)
     value = models.CharField(verbose_name='值',max_length=255)
+    index = models.IntegerField(verbose_name='序号',default=0,null=True,blank=True)
 
 
 # 操作日志表
@@ -34,7 +36,7 @@ class Operationlog(models.Model):
     user = models.ForeignKey(to=Account, verbose_name='用户', on_delete=models.CASCADE)
     ip = models.CharField(max_length=255, verbose_name='登录IP')
     url = models.CharField(max_length=255, verbose_name='访问连接')
-    level = models.CharField(verbose_name='日志级别')
+    level = models.CharField(verbose_name='日志级别',max_length=255)
     describe = models.CharField(max_length=255, verbose_name='描述')
     remark = models.CharField(max_length=255, verbose_name='备注', blank=True, null=True)
 

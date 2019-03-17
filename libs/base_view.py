@@ -7,10 +7,13 @@ from libs.screen_libs import choice_to_dict, get_screen_data
 from django.db.models.fields import DateTimeField, DateField, FloatField, IntegerField, DecimalField
 from libs.printf import print_debug as print
 from libs.permission import permission, forbidden_view
-from libs.loging import parse_extra_url
+from libs.loging import parse_extra_url, parse_api_url
+from django.core.paginator import Paginator
+from libs.constant_pool import PAGE_FIELD_NAME, PAGE_SIZE_FILED_NAME, PAGE_SIZE, SEARCH_FIELD_NAME, ORDER_FIELD_NAME
+from django.db.models import Q
 
 
-class ExtraView():
+class BaseView():
     '''
     创建list，create，update的视图
     筛选所需数据:
@@ -55,8 +58,11 @@ class ExtraView():
     default_updateframe = 'updateframe.html'
     default_updateframe_js = 'updateframe.js'
     Model = None
-    fields = []
+    fields = ()
     router_pool = []
+    search_fields = ()
+    create_fields = ()
+    update_fields = ()
 
     def js_path(self):
         '''
@@ -253,7 +259,7 @@ class ExtraView():
     # list视图
     @classmethod
     def to_view(cls, request):
-        pk, name, permission_table = parse_extra_url(request.path)
+        pk, name, permission_table = parse_api_url(request.path)
         if not permission(request, permission_table, 1):
             return forbidden_view()
         context = {}
@@ -267,6 +273,75 @@ class ExtraView():
             context['delete_permission'] = True
         context = cls.get_view_context(cls, context)
         return render(request, os.path.join(cls.templaters_path, cls.default_view), context)
+
+    @classmethod
+    def api_view(cls, request):
+        pk, name, permission_table = parse_extra_url(request.path)
+        if not permission(request, permission_table, 1):
+            return forbidden_view()
+        # 获取前端传过来的GET数据
+        get_data = request.GET
+        # 页码
+        page = get_data.get(PAGE_FIELD_NAME) or 1
+        # 每页数据
+        page_size = get_data.get(PAGE_SIZE_FILED_NAME) or PAGE_SIZE
+        # 搜索项
+        search = get_data.get(SEARCH_FIELD_NAME)
+        # 排序
+        order = get_data.get(ORDER_FIELD_NAME) or 'id'
+        # 分页
+
+        # 获取数据
+        query_set = cls.Model.objects.all()
+        # 自定义筛选条件
+        query_set = cls.view_queryset(cls, query_set)
+        #   前端传过来的筛选条件
+        screen_data = cls.get_screen_context(cls, {})
+        # 应用的筛选项
+        effective_screen = {}
+        for screen_field in screen_data:
+            if get_data.get(screen_field):
+                effective_screen[screen_field] = get_data[screen_field]
+        # 筛选数据
+        if effective_screen:
+            query_set = query_set.filter(**effective_screen)
+        #     搜索数据
+        if search:
+            query_set = cls.view_search(cls, query_set)
+        #     排序
+        query_set = query_set.order_by(order)
+        query_set = cls.view_return_queryset(cls, query_set)
+        paginator = Paginator(query_set,page_size)
+        return JsonResponse({
+            'count':paginator.count(),
+            'page:':page,
+            'code':200,
+            'data':paginator.page(page)
+        }, safe=False)
+
+    def view_queryset(self, queryset):
+        '''
+        自定义筛选条件
+        :param queryset:
+        :return:
+        '''
+        return queryset.filter(df=0)
+
+    def view_return_queryset(self, queryset):
+        '''
+        在返回response之前处理queryset
+        :param queryset:
+        :return:
+        '''
+        return queryset
+
+    def view_search(self, queryset):
+        '''
+        搜索处理
+        :param queryset:
+        :return:
+        '''
+        return queryset
 
     # 创建视图
     @classmethod
@@ -288,6 +363,28 @@ class ExtraView():
         context = cls.get_create_context(cls, context)
         return render(request, os.path.join(cls.templaters_path, cls.default_createframe), context)
 
+    @classmethod
+    def api_create(cls, request):
+        create_fields = cls.create_fields
+        fields_data =  request.POST
+        fields_data = cls.create_fields_data(cls,fields_data)
+        create_Data = {}
+        for field in fields_data:
+            if field in create_fields:
+                create_Data[field] = fields_data[field]
+
+        try:
+            instance = cls.perform_create(cls,create_Data)
+            return JsonResponse({'code':200,'instace':instance},safe=False)
+        except Exception as e:
+            return JsonResponse({'code':0,'err':e})
+
+    def create_fields_data(self,data):
+        return data
+
+    def perform_create(self, data):
+        return self.Meta.model.objects.create(**data)
+
     # 详情视图
     @classmethod
     def to_retrieve(cls, request, id):
@@ -301,6 +398,14 @@ class ExtraView():
         context['request'] = request
         context = cls.get_retrieve_context(cls, context)
         return render(request, os.path.join(cls.templaters_path, cls.default_retrieve), context)
+
+    def api_retrieve(self,request,id):
+        instance = self.Model.object.filter(df=0,id=id)
+        if instance:
+            instance = instance[0]
+            return JsonResponse({'code':200,'data':instance},safe=False)
+        else:
+            return JsonResponse({'code':0,'err':'此id不存在:'+str(id)})
 
     # 修改视图
     @classmethod
@@ -316,6 +421,44 @@ class ExtraView():
         context = cls.get_update_context(cls, context)
         return render(request, os.path.join(cls.templaters_path, cls.default_updateframe), context)
 
+    @classmethod
+    def api_update(cls,request,id):
+        instance = cls.Model.objects.filter(df=0,id=id)
+        if instance:
+            instance = instance[0]
+        else:
+            return JsonResponse({'code':0,'err':'次ID不存在:'+str(id)})
+        update_fields = cls.update_fields
+        fields_data = request.POST
+        fields_data = cls.update_fields_data(cls, fields_data)
+        update_data = {}
+        for field in fields_data:
+            if field in update_fields:
+                update_data[field] = fields_data[field]
+        try:
+            instance = cls.perform_update(cls,instance,update_data)
+            return JsonResponse({'code':200,'instace':instance},safe=False)
+        except Exception as e:
+            return JsonResponse({'code':0,'err':e})
+
+    def perform_update(self,instance,data):
+        return instance.update(**data)
+
+    def update_fields_data(self,data):
+        return data
+    @classmethod
+    def api_delete(cls,id):
+        instance = cls.Model.objects.filter(df=0,id=id)
+        if instance:
+            instance = instance[0]
+            if cls.perform_delete(cls,instance):
+                return JsonResponse({'code':200,})
+        else:
+            return JsonResponse({'code':0,'err':'此id不存在:'+str(id)})
+    def perform_delete(self,instance):
+        instance.df = 1
+        instance.save()
+        return True
     # 筛选数据
     @classmethod
     def get_screen_data(cls, request):
@@ -385,10 +528,17 @@ class ExtraView():
     @classmethod
     def router(cls):
         cls.new_router(cls)
-        urlpatterns = [url(r'^view/(.+?)/$', cls.to_retrieve), url(r'^view/$', cls.to_view),
+        urlpatterns = [url(r'^view/(.+?)/$', cls.to_retrieve),
+                       url(r'^view/$', cls.to_view),
                        url(r'^createframe/?(.*?)/$', cls.to_create_frame),
-                       url(r'^updateframe/(.+?)/$', cls.to_update_frame), url(r'^screen.json/$', cls.get_screen_data),
+                       url(r'^updateframe/(.+?)/$', cls.to_update_frame),
+                       url(r'^screen.json/$', cls.get_screen_data),
                        url(r'^field/(.+?)/$', cls.get_fields),
+                       url(r'^api/view/$',cls.api_view),
+                       url(r'^api/create/$',cls.api_create),
+                       url(r'^api/update/(\d+)/',cls.api_update),
+                       url(r'api/retrieve/(\d+)/',cls.api_retrieve),
+                       url(r'api/delete/(\d+)/', cls.api_delete)
 
                        ]
         return urlpatterns + cls.router_pool
