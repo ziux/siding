@@ -3,6 +3,9 @@ from course.models import TeachPlan
 # Create your models here.
 
 class Teacher(models.Model):
+    createdate = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updatedate = models.DateTimeField(auto_now=True, blank=True, null=True)
+    df = models.BooleanField(default=False)
     code = models.CharField(verbose_name='工号',max_length=255,unique=True)
     name = models.CharField(verbose_name='姓名',max_length=255)
     professional_rank = models.CharField(verbose_name='职称',max_length=255)
@@ -14,6 +17,8 @@ class Teacher(models.Model):
 
 
 class PlanTeacher(models.Model):
+    createdate = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updatedate = models.DateTimeField(auto_now=True, blank=True, null=True)
     plan = models.ForeignKey(verbose_name='教学计划', to=TeachPlan, on_delete=models.CASCADE)
     teacher = models.ForeignKey(verbose_name='教师',to=Teacher,on_delete=models.CASCADE)
     type = models.CharField(verbose_name='教学方式',max_length=255)

@@ -16,8 +16,10 @@ Including another URLconf
 
 from django.urls import path
 from django.conf.urls import url,include
+from system.views import index_view,main_view
 urlpatterns = [
-
+    path('', index_view),
+    path('page/main.html',main_view)
 ]
 from django.conf import settings
 from django.conf.urls.static import static

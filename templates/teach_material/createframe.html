@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="/static/layui/css/layui.css" media="all" />
+
+<style type="text/css">
+.layui-form-item .layui-inline {
+	width: 33.333%;
+	float: left;
+	margin-right: 0;
+}
+
+@media ( max-width :1240px) {
+	.layui-form-item .layui-inline {
+		width: 100%;
+		float: none;
+	}
+}
+</style>
+</head>
+<body class="childrenBody">
+	<form class="layui-form" id="uploadForm" style="width: 80%;" enctype="multipart/form-data">
+              <div class="layui-form-item">
+			<label class="layui-form-label">工艺编号</label>
+			<div class="layui-input-block">
+				<select name="craftwork_id" id="craftwork_id"  lay-verify="" lay-search>
+                <option value="" >选择或者搜索</option>
+                    {% for oper in craftwork_id %}
+                        {% ifequal oper.pk tmpl.craftwork_id %}
+                             <option value="{{ oper.pk }}" selected>{{ oper.name }}({{ oper.code }})</option>
+                            {% else %}
+                            <option value="{{ oper.pk }}">{{ oper.name }}({{ oper.code }})</option>
+                        {% endifequal %}
+                    {% endfor %}
+                </select>
+			</div>
+
+		</div>
+        <div class="layui-form-item">
+			<label class="layui-form-label">模具图号</label>
+			<div class="layui-input-block">
+				<select name="mtype_id" id="mtype_id"  lay-verify="" lay-search>
+                <option value="" >选择或者搜索</option>
+                    {% for oper in mtype_id %}
+                        {% ifequal oper.mtypeid tmpl.mtype_id %}
+                             <option value="{{ oper.mtypeid }}" selected>{{ oper.name }}</option>
+                            {% else %}
+                            <option value="{{ oper.mtypeid }}">{{ oper.name }}</option>
+                        {% endifequal %}
+                    {% endfor %}
+                </select>
+			</div>
+
+		</div>
+         <div class="layui-form-item">
+			<label class="layui-form-label">所需数量</label>
+			<div class="layui-input-block">
+				<input type="text" name="number" class="layui-input" lay-verify="required"
+					placeholder="请输入数量" value="{{ tmpl.number }}">
+			</div>
+		</div>
+
+
+
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit="" lay-filter="addSubmit">立即提交</button>
+				<button type="reset" id="resetButton" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript" src="/static/layui/layui.js"></script>
+	<script type="text/javascript" src="{% static js_path %}"></script>
+</body>
+</html>
