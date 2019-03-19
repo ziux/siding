@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8c25ed31-4d69-41ab-b60f-9f994e1e3087" name="Default" comment="1.修改了部分表结构">
+    <list default="true" id="8c25ed31-4d69-41ab-b60f-9f994e1e3087" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/constant_pool.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/constant_pool.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/extra_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/base_view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/system/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/system/models.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -46,8 +43,8 @@
       <file leaf-file-name="base_view.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/libs/base_view.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="426" column="65" selection-start-line="426" selection-start-column="65" selection-end-line="426" selection-end-column="65" />
+            <state relative-caret-position="-340">
+              <caret line="405" column="59" selection-start-line="405" selection-start-column="59" selection-end-line="405" selection-end-column="59" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -359,25 +356,41 @@
       <option name="project" value="LOCAL" />
       <updated>1552811786688</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="1.修改了部分表结构&#10;2.完成了BaseView">
+      <created>1552831169286</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1552831169286</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info active="true" anchor="bottom" id="TODO" order="6" visible="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.22860238" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.22860238" />
       <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32936078" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4985955" visible="true" weight="0.26332623" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49757674" visible="true" weight="0.26332623" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
       <window_info anchor="right" id="SciView" order="3" />
-      <window_info id="Structure" order="1" sideWeight="0.5014045" side_tool="true" visible="true" weight="0.26332623" />
+      <window_info id="Structure" order="1" sideWeight="0.5024233" side_tool="true" visible="true" weight="0.26332623" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -387,7 +400,6 @@
       <window_info anchor="bottom" id="manage.py@siding" order="7" weight="0.32502708" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -402,7 +414,8 @@
     <MESSAGE value="1.数据库设计" />
     <MESSAGE value="1.前端框架基本内容" />
     <MESSAGE value="1.更新数据表结构，&#10;2.libs一些工具&#10;3.前端框架架构" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.更新数据表结构，&#10;2.libs一些工具&#10;3.前端框架架构" />
+    <MESSAGE value="1.修改了部分表结构&#10;2.完成了BaseView" />
+    <option name="LAST_COMMIT_MESSAGE" value="1.修改了部分表结构&#10;2.完成了BaseView" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -661,6 +674,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -782,8 +798,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/libs/base_view.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="426" column="65" selection-start-line="426" selection-start-column="65" selection-end-line="426" selection-end-column="65" />
+        <state relative-caret-position="-340">
+          <caret line="405" column="59" selection-start-line="405" selection-start-column="59" selection-end-line="405" selection-end-column="59" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
